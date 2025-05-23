@@ -1,0 +1,238 @@
+1)//Table Creation In JDBC(Connectivity).
+package jdbc;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
+
+public class jdbc1 {
+
+	public static void main(String[] args) {
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			Connection con=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","system","password");
+			Statement stmt=con.createStatement();
+			stmt.executeQuery("create table stud5(rno number,sname varchar2(20),mob number)");
+			System.out.println("Created");
+			con.close();
+		}
+		catch(Exception e){
+			System.out.println(e);
+		}
+	}
+
+}
+
+
+
+2)//Fetch data from Database.
+package jdbc;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+public class jdbc2 {
+
+	public static void main(String[] args) {
+		try 
+		{
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			Connection con=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","system","password");
+			Statement stmt=con.createStatement();
+			ResultSet rs=stmt.executeQuery("select * from stud5");
+			while(rs.next())
+			{
+				System.out.println(rs.getInt(1)+" "+rs.getString(2)+" "+rs.getLong(3));
+			}
+			con.close();
+		}
+		catch(Exception e)
+		{
+			System.out.println(e);
+		}
+
+	}
+
+}
+
+
+
+3)//Insert Command.
+package jdbc;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
+
+public class jdbc3 {
+
+	public static void main(String[] args) {
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			Connection con=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","system","password");
+			Statement stmt=con.createStatement();
+			stmt.executeQuery("insert into stud5 values(2,'Vijay',2734564989)");
+			stmt.executeQuery("insert into stud5 values(3,'Dinesh',6557569998)");
+			stmt.executeQuery("insert into stud5 values(4,'Ramesh',7648594397)");
+			stmt.executeQuery("insert into stud5 values(5,'Suresh',5434578765)");
+			stmt.executeQuery("insert into stud5 values(6,'Dipak',9876435667)");
+			System.out.println("Inserted");
+			con.close();
+		}
+		catch(Exception e){
+			System.out.println(e);
+		}
+
+	}
+
+}
+
+
+4)//particular Data Fetch.
+package jdbc;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+public class jdbc4 {
+
+	public static void main(String[] args) {
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			Connection con=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","system","password");
+			Statement stmt=con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+			ResultSet rs=stmt.executeQuery("select * from stud5");
+			rs.absolute(1);
+			System.out.println(rs.getInt(1)+" "+rs.getString(2)+" "+rs.getLong(3));
+			con.close();
+		}
+		catch(Exception e){
+			System.out.println(e);
+		}
+
+	}
+
+}
+
+
+5)//Insert Data by Parameterized Data.
+package jdbc;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+
+public class jdbc5 {
+
+	public static void main(String[] args) {
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			Connection con=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","system","password");
+			PreparedStatement stmt = con.prepareStatement("insert into stud5 values(?,?,?)");
+			stmt.setInt(1, 7);
+			stmt.setString(2,"Satish");
+			stmt.setLong(3,465637467);
+			int i=stmt.executeUpdate();
+			System.out.println(i+" Record Inserted..");
+			con.close();
+		}
+
+		catch(Exception e){
+			System.out.println(e);
+		}
+
+	}
+
+}
+
+6)//Delete the data from table.
+package jdbc;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
+
+public class jdbc6 {
+
+	public static void main(String[] args) {
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			Connection con=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","system","password");
+			Statement stmt=con.createStatement();
+			stmt.executeQuery("delete from stud5 where rno=7");
+			System.out.println("Deleted..");
+			con.close();
+		}
+		catch(Exception e){
+			System.out.println(e);
+		}
+
+	}
+
+}
+
+7)//ResultSetMetaData Interface Code.
+package jdbc;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+
+public class jdbc7 {
+
+	public static void main(String[] args) {
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			Connection con=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","system","password");
+			PreparedStatement stmt = con.prepareStatement("select * from stud5");
+			ResultSet rs=stmt.executeQuery();
+			ResultSetMetaData rsm=rs.getMetaData();
+			System.out.println("Total Count="+rsm.getColumnCount());
+			System.out.println("ColumnName="+rsm.getColumnName(1));
+			System.out.println("ColumnTypeName="+rsm.getColumnTypeName(1));
+			con.close();
+		}
+		catch(Exception e){
+			System.out.println(e);
+		}
+
+	}
+
+}
+
+8)//Call Interface
+package jdbc;
+
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+public class jdbc8 {
+
+	public static void main(String[] args) {
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			Connection con=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","system","password");
+			CallableStatement stmt=con.prepareCall("{call proc2(?,?,?)}");
+			stmt.setInt(1, 8);
+			stmt.setString(2,"Sudeep");
+			stmt.setLong(3, 765748380);
+			stmt.execute();
+			System.out.println("Data Inserted");
+			con.close();
+		}
+		catch(Exception e){
+			System.out.println(e);
+		}
+
+	}
+
+}
+
+
